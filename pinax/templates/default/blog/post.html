@@ -7,6 +7,10 @@
 {% load tagging_tags %}
 {% load blog_tags %}
 {% load theme_tags %}
+{% load switchcase %}
+{% load creole %}
+{% load restructuredtext %}
+{% load markup %}
 
 {% block head_title %}{% blocktrans %}Blog Post{% endblocktrans %} : {{ post.title }}{% endblock %}
 
@@ -32,7 +36,24 @@
         </div>
         
         {% show_blog_post post %}
-        
+
+        <div class="blog-post-body">
+        {% switch post.markup %}
+            {% case "restructuredtext" %}
+                {{ post.body|restructuredtext }}
+            {% endcase %}
+            {% case "textile" %}
+                {{ post.body|textile }}
+            {% endcase %}
+            {% case "markdown" %}
+                {{ post.body|markdown }}
+            {% endcase %}
+            {% case "creole" %}
+                {{ post.body|creole }}
+            {% endcase %}
+        {% endswitch %}
+        </div>
+
     </div>
     
     <h3>Comments on This Post:</h3>
