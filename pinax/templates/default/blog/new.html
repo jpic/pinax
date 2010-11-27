@@ -5,12 +5,25 @@
 
 {% block head_title %}{% blocktrans %}Write a Blog Post{% endblocktrans %}{% endblock %}
 
+{% block extra_head %}
+{{ block.super }}
+<style type="text/css">
+form.uniForm fieldset input, 
+form.uniForm fieldset textarea {
+    width: 100%;
+}
+form.uniForm fieldset textarea#id_body {
+    height: 600px;
+}
+</style>
+{% endblock %}
+
 {% block body %}
     
     {# @@@ not sure how to bring back teaser toggle with uni_form #}
     <form class="uniForm" id="edit-profile" method="POST" action="">
         {% csrf_token %}
-        <fieldset class="inlineLabels">
+        <fieldset>
             {{ blog_form|as_uni_form }}
             <div class="form_block">
             <input type="hidden" name="action" value="create" />
@@ -22,11 +35,15 @@
 {% endblock %}
 
 {% block extra_body %}
+    {{ block.super }}
     {% load jquery_validation %}
     {% include_validation %}
+    {{ blog_form.media }}
     <script type="text/javascript">
         $(function(){
             $('#blog_form').validate('{% url blog_form_validate %}', {type: 'table'});
+            $("#id_publish").datepicker({ dateFormat: 'dd/mm/yy' });
         });
     </script>
+    <!--extra body-->
 {% endblock %}

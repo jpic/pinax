@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django import forms
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from pinax.apps.blog.models import Post
@@ -13,7 +14,20 @@ class BlogForm(forms.ModelForm):
         max_length = 20,
         help_text = _("a short version of the title consisting only of letters, numbers, underscores and hyphens."),
     )
-    
+    publish = forms.DateField(('%d/%m/%Y',), required=True,
+        widget=forms.DateTimeInput(format='%d/%m/%Y', attrs={
+            'class':'input',
+            'readonly':'readonly',
+            'size':'15'
+        })
+    )
+
+    class Media:
+        js = (
+            settings.STATIC_URL + 'pinax/js/jquery-ui-1.7.3.datepicker.min.js',
+            settings.STATIC_URL + 'pinax/css/jquery-ui-1.7.3.cupertrino.css',
+        )
+
     class Meta:
         model = Post
         exclude = [
@@ -21,7 +35,6 @@ class BlogForm(forms.ModelForm):
             "creator_ip",
             "created_at",
             "updated_at",
-            "publish",
         ]
     
     def __init__(self, user=None, *args, **kwargs):

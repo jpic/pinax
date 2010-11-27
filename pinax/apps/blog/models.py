@@ -39,8 +39,8 @@ class Post(models.Model):
         blank = True,
         null = True
     )
-    body = models.TextField(_("body"))
     tease = models.TextField(_("tease"), blank=True)
+    body = models.TextField(_("body"))
     status = models.IntegerField(_("status"), choices=STATUS_CHOICES, default=2)
     allow_comments = models.BooleanField(_("allow comments"), default=True)
     publish = models.DateTimeField(_("publish"), default=datetime.now)
