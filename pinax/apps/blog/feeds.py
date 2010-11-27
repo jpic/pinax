@@ -9,6 +9,7 @@ from django.template.defaultfilters import linebreaks, escape, capfirst
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.contrib.markup.templatetags.markup import textile, markdown, restructuredtext
 
 from friends.models import friend_set_for
 
@@ -38,7 +39,19 @@ class BasePostFeed(Feed):
         return post.created_at
     
     def item_content(self, post):
-        return {"type": "html"}, linebreaks(escape(post.body))
+        if post.markup == 'restructuredtext':
+            tease = restructuredtext(post.tease)
+            body = restructuredtext(post.body)
+        elif post.markup == 'textile':
+            tease = textile(post.tease)
+            body = textile(post.body)
+        elif post.markup == 'markdown':
+            tease = markdown(post.tease)
+            body = markdown(post.body)
+        else:
+            tease = linebreaks(escape(post.tease))
+            body = linebreaks(escape(post.body))
+        return {"type": "html"}, tease + body
     
     def item_links(self, post):
         return [{"href": self.item_id(post)}]
