@@ -15,11 +15,26 @@ form.uniForm fieldset textarea {
 form.uniForm fieldset textarea#id_body {
     height: 600px;
 }
+.uniForm input.textInput,
+.uniForm .blockLabels input.textInput,
+.uniForm .blockLabels input.fileUpload {
+    width: 100%;
+}
+.uniForm p.formHint,
+.uniForm .blockLabels p.formHint {
+    width: 100%;
+    top: 0;
+}
+.ui-datepicker.ui-widget {
+    z-index: 1000;
+    background-color: white;
+}
 </style>
 {% endblock %}
 
 {% block body %}
-    
+    <h1>{% trans "Write a new Blog Post" %}</h1>
+
     {# @@@ not sure how to bring back teaser toggle with uni_form #}
     <form class="uniForm" id="edit-profile" method="POST" action="">
         {% csrf_token %}
@@ -42,7 +57,7 @@ form.uniForm fieldset textarea#id_body {
     <script type="text/javascript">
         $(function(){
             $('#blog_form').validate('{% url blog_form_validate %}', {type: 'table'});
-            $("#id_publish").datepicker({ dateFormat: 'dd/mm/yy' });
+            $('#id_publish').datepicker({ dateFormat: 'dd/mm/yy' });
         });
     </script>
     <!--extra body-->
